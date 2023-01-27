@@ -1,4 +1,5 @@
 const { src, dest, series, watch, parallel } = require('gulp');
+const rename = require('gulp-rename')
 const sass = require('gulp-sass')(require('sass'));
 const liveServer = require("live-server");
 
@@ -10,18 +11,19 @@ function buildAssets() {
 function buildStyles() {
     return src('src/sass/**/*.scss')
         .pipe(sass().on('error', sass.logError))
+        .pipe(rename('style.css'))
         .pipe(dest('./dist/css'));
 }
 
 function buildHTML() {
-    return src('src/*.html')
+    return src('src/**/*.html')
         .pipe(dest('dist/'))
 }
 
 function watcher() {
     watch('src/assets/**/*', buildAssets);
     watch('src/sass/**/*.scss', buildStyles);
-    watch('src/*.html', buildHTML);
+    watch('src/**/*.html', buildHTML);
     return Promise.resolve();
 }
 
